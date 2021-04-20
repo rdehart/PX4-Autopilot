@@ -63,6 +63,7 @@
 #include <uORB/Publication.hpp>
 #include <uORB/topics/manual_control_setpoint.h>
 #include <uORB/topics/parameter_update.h>
+#include <uORB/topics/setpoint_motor.h>
 #include <uORB/topics/vehicle_attitude.h>
 #include <uORB/topics/vehicle_attitude_setpoint.h>
 #include <uORB/topics/vehicle_angular_velocity.h>
@@ -106,6 +107,7 @@ private:
 	uORB::Subscription _vehicle_rates_setpoint_sub{ORB_ID(vehicle_rates_setpoint)}; /**< vehicle bodyrates setpoint subscriber */
 	uORB::Subscription _angular_velocity_sub{ORB_ID(vehicle_angular_velocity)};	/**< vehicle angular velocity subscription */
 	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)};	/**< notification of manual control updates */
+	uORB::Subscription _motor_setpoint_sub{ORB_ID(setpoint_motor)};
 	uORB::Subscription _vcontrol_mode_sub{ORB_ID(vehicle_control_mode)};		/**< vehicle status subscription */
 
 	uORB::SubscriptionCallbackWorkItem _vehicle_attitude_sub{this, ORB_ID(vehicle_attitude)};
@@ -114,6 +116,7 @@ private:
 	manual_control_setpoint_s _manual_control_setpoint {}; /**< r/c channel data */
 	vehicle_attitude_setpoint_s _attitude_setpoint {}; /**< vehicle attitude setpoint */
 	vehicle_rates_setpoint_s _rates_setpoint {}; /**< vehicle bodyrates setpoint */
+	setpoint_motor_s _motor_setpoint{};
 	vehicle_control_mode_s _vcontrol_mode {}; /**< vehicle control mode */
 
 	perf_counter_t	_loop_perf; /**< loop performance counter */

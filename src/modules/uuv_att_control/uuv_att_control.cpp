@@ -271,6 +271,14 @@ void UUVAttitudeControl::Run()
 			} else {
 				control_attitude_geo(attitude, _attitude_setpoint, angular_velocity, _rates_setpoint);
 			}
+
+			if (input_mode == 2) {
+				_motor_setpoint_sub.update(&_motor_setpoint);
+
+				for (int i = 0; i < 8; i++) {
+					_actuators.control[i] = _motor_setpoint.setpoint[i];
+				}
+			}
 		}
 	}
 

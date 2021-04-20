@@ -146,6 +146,9 @@ void
 MavlinkReceiver::handle_message(mavlink_message_t *msg)
 {
 	switch (msg->msgid) {
+	case MAVLINK_MSG_ID_SETPOINT_MOTOR:
+		handle_message_setpoint_motor(msg);
+		break;
 	case MAVLINK_MSG_ID_COMMAND_LONG:
 		handle_message_command_long(msg);
 		break;
@@ -397,6 +400,26 @@ MavlinkReceiver::evaluate_target_ok(int command, int target_system, int target_c
 	}
 
 	return target_ok;
+}
+
+void
+MavlinkReceiver::handle_message_setpoint_motor(mavlink_message_t *msg)
+{
+  offboard_control_mode_s offboard_control_mode{};
+  offboard_control_mode.timestamp = hrt_absolute_time();
+  _offboard_control_mode_pub.publish(offboard_control_mode);
+
+	mavlink_setpoint_motor_t sp;
+	mavlink_msg_setpoint_motor_decode(msg, &sp);
+
+	struct setpoint_motor_s out {};
+	out.timestamp = hrt_absolute_time();
+
+	for (int i = 0; i < 8; i++) {
+		out.setpoint[i] = sp.setpoint[i];
+	}
+
+	_setpoint_motor_pub.publish(out);
 }
 
 void
